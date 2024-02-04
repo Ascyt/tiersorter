@@ -1,0 +1,113 @@
+@import '../node_modules/bootstrap/dist/css/bootstrap.css';
+
+:root {
+    --back: #000000;
+    --back-high: #101010;
+    --back-mid: #303030;
+    --back-low: #505050;
+    --mid: #808080;
+    --front-low: #a0a0a0;
+    --front-mid: #c0c0c0;
+    --front-high: #e0e0e0;
+    --front: #ffffff;
+}
+.dark-theme {
+    --back: #000000;
+    --back-high: #101010;
+    --back-mid: #303030;
+    --back-low: #505050;
+    --mid: #808080;
+    --front-low: #a0a0a0;
+    --front-mid: #c0c0c0;
+    --front-high: #e0e0e0;
+    --front: #ffffff;
+    --link: #0078d7;
+    --link-hover: #005299;
+    transition: 0.2s;
+}
+.light-theme {
+    --back: #ffffff;
+    --back-high: #e0e0e0;
+    --back-mid: #c0c0c0;
+    --back-low: #a0a0a0;
+    --mid: #808080;
+    --front-low: #606060;
+    --front-mid: #404040;
+    --front-high: #202020;
+    --front: #000000;
+    --link: #0d6efd;
+    --link-hover: #0a58ca;
+    transition: 0.2s;
+}
+.what { // ignore this
+    --back: #ff0000;
+    --back-high: #ff8000;
+    --back-mid: #ffff00;
+    --back-low: #00ff00;
+    --mid: #00ffff;
+    --front-low: #0080ff;
+    --front-mid: #0000ff;
+    --front-high: #8000ff;
+    --front: #ff00ff;
+    p {
+        transform: rotate(180deg);
+    }
+    * {
+        border: 1px dotted white;
+        filter:contrast(10);
+    }
+    img {
+        transform: rotate3d(1, 1, 1, 180deg);
+    }
+    a {
+        display: none;
+    }
+}
+
+body {
+    background-color: var(--back);
+    color: var(--front);
+}
+
+a {
+    color: var(--link);
+    transition: 0.2s;
+
+    &:hover {
+        color: var(--link-hover);
+        transition: 0.3s;
+    }
+}
+
+.list-group-item, .list-group-item-action {
+    background-color: var(--back-high);
+    color: var(--front);
+    border: 1px solid var(--back-mid);
+    border-radius: 0;
+
+    transition: 0.2s;
+}
+.list-group-item-action:hover {
+    background-color: var(--back-mid);
+    color: var(--front);
+    transition: 0.2s;
+}
+.list-group-item-action:active {
+    background-color: var(--back-low);
+    color: var(--front);
+    transition: 0.2s;
+}
+
+.tooltip {
+    .tooltip-arrow {
+        display: none;
+    }
+    
+    color: var(--front);
+
+    .tooltip-inner {
+        background-color: var(--back-high);
+        color: var(--front);
+        max-width: fit-content;
+    }
+}
