@@ -111,3 +111,26 @@ a {
         max-width: fit-content;
     }
 }
+
+input.form-control, textarea.form-control, select.form-control{
+    background-color: var(--back);
+    color: var(--front-mid);
+    border-color: var(--back-mid);
+    
+    &::placeholder {
+        color: var(--back-low);
+    }
+
+    &:hover {
+        color: var(--front);
+        border-color: var(--mid);
+    }
+
+    &:focus {
+        background-color: var(--back-high);
+        color: var(--front);
+        border-color: var(--mid);
+    }
+
+    transition: 0.2s;
+}

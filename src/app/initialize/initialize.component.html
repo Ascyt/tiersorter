@@ -1,0 +1,10 @@
+<table class="table">
+    <tbody>
+        <tr *ngFor="let value of values">
+            <app-value-input [value]="value"></app-value-input>
+        </tr>   
+    </tbody>
+</table>
+<button class="btn btn-outline-primary" (click)="addValue()">Add Value</button>
+<div class="m-2"></div>
+<button class="btn btn-primary" (click)="onSubmit()">Submit</button>
