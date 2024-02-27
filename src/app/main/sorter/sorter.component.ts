@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { Value, ValuesService } from '../values.service';
 import { SortStepService } from './sort-step.service';
 
@@ -10,6 +10,8 @@ import { SortStepService } from './sort-step.service';
   styleUrl: './sorter.component.scss'
 })
 export class SorterComponent {
+  @Output() public sortingComplete = new EventEmitter();
+
   constructor(private valuesService: ValuesService, private sortStepService:SortStepService) {
 
   }
@@ -19,5 +21,17 @@ export class SorterComponent {
   }
   public get decisionRight(): (Value|undefined) {
     return this.sortStepService.currentDecision[1];
+  }
+
+  public decisionMade(isLeft: boolean): void {
+    const isFinished:boolean = this.sortStepService.sortSingleStep(isLeft);
+
+    if (isFinished) {
+      this.sortingComplete.emit();
+      console.log("finished");
+      return;
+    }
+
+    this.sortStepService.currentDecision = this.sortStepService.getDecision();
   }
 }

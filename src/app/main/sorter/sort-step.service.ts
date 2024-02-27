@@ -32,69 +32,77 @@ export class SortStepService {
 
   // Always returns Value[] of length 2
   getDecision(): (Value|undefined)[] {
-    if (!this.stepData)
+    if (this.stepData === undefined)
       throw new Error('stepData is not set');
 
-    const middle:number = Math.floor(this.stepData.currentValues.length / 2);
-    const leftIndex:number = this.stepData.position + (this.stepData.firstHalfIndex || 0);
-    const rightIndex:number = this.stepData.position + (this.stepData.secondHalfIndex || middle);
+    const middle:number = this.stepData.size;
+    const leftIndex:number = this.stepData.position + (this.stepData.firstHalfIndex ?? 0);
+    const rightIndex:number = this.stepData.position + (this.stepData.secondHalfIndex ?? middle);
 
     return [this.stepData.currentValues[leftIndex], this.stepData.currentValues[rightIndex]];
   }
 
   // Returns true if the sort is complete
-  sortSingleStep(useLeft: boolean): Boolean {
-    if (!this.stepData)
+  sortSingleStep(useLeft: boolean): boolean {
+    if (this.stepData === undefined)
       throw new Error('stepData is not set');
 
-    const middle:number = Math.floor(this.stepData.currentValues.length / 2);
-    const leftIndex:number = this.stepData.position + (this.stepData.firstHalfIndex || 0);
-    const rightIndex:number = this.stepData.position + (this.stepData.secondHalfIndex || middle);
-    const leftValue:Value = this.stepData.currentValues[leftIndex];
-    const rightValue:Value = this.stepData.currentValues[rightIndex];
+    const stepData:StepData = {...this.stepData};
+    
+    console.log(this.stepData);
 
-    if (!this.stepData.temporaryValues) {
-      this.stepData.temporaryValues = [];
-      this.stepData.firstHalfIndex = 0;
-      this.stepData.secondHalfIndex = middle;
+    const middle:number = stepData.size;
+    if (stepData.temporaryValues === undefined) {
+      stepData.temporaryValues = [];
+      stepData.firstHalfIndex = 0;
+      stepData.secondHalfIndex = middle;
     }
 
-    if (!this.stepData.firstHalfIndex)
+    if (stepData.firstHalfIndex === undefined)
       throw new Error('firstHalfIndex is not set');
-    if (!this.stepData.secondHalfIndex)
+    if (stepData.secondHalfIndex === undefined)
       throw new Error('secondHalfIndex is not set');
 
+    const leftIndex:number = stepData.position + stepData.firstHalfIndex;
+    const rightIndex:number = stepData.position + stepData.secondHalfIndex;
+    const leftValue:Value = stepData.currentValues[leftIndex];
+    const rightValue:Value = stepData.currentValues[rightIndex];
+
     if (useLeft) {
-      this.stepData.temporaryValues.push(leftValue);
-      this.stepData.firstHalfIndex += 1;
+      stepData.temporaryValues.push(leftValue);
+      stepData.firstHalfIndex += 1;
     } else {
-      this.stepData.temporaryValues.push(rightValue);
-      this.stepData.secondHalfIndex += 1;
+      stepData.temporaryValues.push(rightValue);
+      stepData.secondHalfIndex += 1;
     }
 
-    if (this.stepData.firstHalfIndex > middle || this.stepData.secondHalfIndex >= this.stepData.currentValues.length) {
+    if (stepData.firstHalfIndex >= middle || stepData.secondHalfIndex >= stepData.currentValues.length) {
       // Remove the rest
-      const startIndex:number = this.stepData.firstHalfIndex > middle ? rightIndex : leftIndex;
-      const endIndex:number = this.stepData.firstHalfIndex > middle ? this.stepData.currentValues.length - 1 : middle - 1;
+      const startIndex:number = stepData.firstHalfIndex >= middle ? rightIndex : leftIndex;
+      const endIndex:number = stepData.firstHalfIndex >= middle ? stepData.currentValues.length - 1 : middle - 1;
       for (let i = startIndex; i <= endIndex; i++) {
-        this.stepData.temporaryValues.push(this.stepData.currentValues[i]);
+        stepData.temporaryValues.push(stepData.currentValues[i]);
       }
 
       // Copy temporaryValues to currentValues
-      for (let i = 0; i < this.stepData.temporaryValues.length; i++) {
-        this.stepData.currentValues[this.stepData.position + i] = this.stepData.temporaryValues[i];
+      for (let i = 0; i < stepData.temporaryValues.length; i++) {
+        stepData.currentValues[stepData.position + i] = stepData.temporaryValues[i];
       }
 
-      this.stepData.temporaryValues = undefined;
-      this.stepData.firstHalfIndex = undefined;
-      this.stepData.secondHalfIndex = undefined;
-      this.stepData.position += this.stepData.size * 2;
-      if (this.stepData.position >= this.stepData.currentValues.length) {
-        this.stepData.size *= 2;
-        this.stepData.position = 0;
+      stepData.temporaryValues = undefined;
+      stepData.firstHalfIndex = undefined;
+      stepData.secondHalfIndex = undefined;
+      stepData.position += stepData.size * 2;
+      if (stepData.position >= stepData.currentValues.length) {
+        stepData.size *= 2;
+        stepData.position = 0;
       }
     }
     
-    return this.stepData.size >= this.stepData.currentValues.length;
+    this.stepData = stepData;
+
+    console.log(stepData);
+
+    return stepData.size >= stepData.currentValues.length;
   }
 }
