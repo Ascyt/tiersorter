@@ -5,10 +5,9 @@ export interface StepData {
   currentValues: Value[];
   size: number;
   position: number;
-  temporaryValues?: Value[]; 
-  firstHalfIndex?: number;
-  // secondHalfIndex includes middle index
-  secondHalfIndex?: number;
+  temporaryValues: Value[];
+  leftHalf: Value[];
+  rightHalf: Value[];
 }
 
 @Injectable({
@@ -24,7 +23,10 @@ export class SortStepService {
     this.stepData = {
       currentValues: this.valuesService.values.map(value => ({ ...value })),
       size: 1,
-      position: 0
+      position: 0,
+      temporaryValues: [],
+      leftHalf: [this.valuesService.values[0]],
+      rightHalf: [this.valuesService.values[1]]
     };
 
     this.currentDecision = this.getDecision();
@@ -35,11 +37,7 @@ export class SortStepService {
     if (this.stepData === undefined)
       throw new Error('stepData is not set');
 
-    const middle:number = Math.min(this.stepData.size, Math.floor((this.stepData.currentValues.length - this.stepData.position) / 2));
-    const leftIndex:number = this.stepData.position + (this.stepData.firstHalfIndex ?? 0);
-    const rightIndex:number = this.stepData.position + (this.stepData.secondHalfIndex ?? middle);
-
-    return [this.stepData.currentValues[leftIndex], this.stepData.currentValues[rightIndex]];
+    return [this.stepData.leftHalf[0], this.stepData.rightHalf[0]];
   }
 
   // Returns true if the sort is complete
@@ -51,59 +49,44 @@ export class SortStepService {
     
     console.log(this.stepData);
 
-    const middle:number = Math.min(stepData.size, Math.floor((stepData.currentValues.length - stepData.position) / 2));
-    const maxLength:number = Math.min(stepData.size * 2, stepData.currentValues.length - stepData.position);
-    if (stepData.temporaryValues === undefined) {
-      stepData.temporaryValues = [];
-      stepData.firstHalfIndex = 0;
-      stepData.secondHalfIndex = middle;
-    }
-
-    if (stepData.firstHalfIndex === undefined)
-      throw new Error('firstHalfIndex is not set');
-    if (stepData.secondHalfIndex === undefined)
-      throw new Error('secondHalfIndex is not set');
-
-    const leftIndex:number = stepData.position + stepData.firstHalfIndex;
-    const rightIndex:number = stepData.position + stepData.secondHalfIndex;
-    const leftValue:Value = stepData.currentValues[leftIndex];
-    const rightValue:Value = stepData.currentValues[rightIndex];
-
     if (useLeft) {
-      stepData.temporaryValues.push(leftValue);
-      stepData.firstHalfIndex += 1;
+      stepData.temporaryValues.push(stepData.leftHalf.splice(0, 1)[0]);
     } else {
-      stepData.temporaryValues.push(rightValue);
-      stepData.secondHalfIndex += 1;
+      stepData.temporaryValues.push(stepData.rightHalf.splice(0, 1)[0]);
     }
 
-    if (stepData.firstHalfIndex >= middle || stepData.secondHalfIndex >= maxLength) {
-      // Remove the rest
-      const startIndex:number = stepData.firstHalfIndex >= middle ? stepData.secondHalfIndex : stepData.firstHalfIndex;
-      const endIndex:number = stepData.firstHalfIndex >= middle ? maxLength - 1 : middle - 1;
-      for (let i = startIndex; i <= endIndex; i++) {
-        stepData.temporaryValues.push(stepData.currentValues[stepData.position + i]);
-      }
+    let nextStep:boolean = false;
+    if (stepData.leftHalf.length === 0) {
+      stepData.temporaryValues = stepData.temporaryValues.concat(stepData.rightHalf);
+      stepData.rightHalf = [];
+      nextStep = true;
+    }
+    if (stepData.rightHalf.length === 0) {
+      stepData.temporaryValues = stepData.temporaryValues.concat(stepData.leftHalf);
+      stepData.leftHalf = [];
+      nextStep = true;
+    }
 
-      // Copy temporaryValues to currentValues
-      for (let i = 0; i < stepData.temporaryValues.length; i++) {
-        stepData.currentValues[stepData.position + i] = stepData.temporaryValues[i];
-      }
-
-      stepData.temporaryValues = undefined;
-      stepData.firstHalfIndex = undefined;
-      stepData.secondHalfIndex = undefined;
-      stepData.position += stepData.size * 2;
+    if (nextStep) {
+      stepData.currentValues.splice(stepData.position, stepData.temporaryValues.length, ...stepData.temporaryValues);
+      stepData.position += stepData.temporaryValues.length;
+      stepData.temporaryValues = [];
+    
       if (stepData.position >= stepData.currentValues.length - stepData.size) {
         stepData.size *= 2;
         stepData.position = 0;
       }
+
+      if (stepData.size >= stepData.currentValues.length) {
+        this.stepData = undefined;
+        return true;
+      }
+
+      stepData.leftHalf = stepData.currentValues.slice(stepData.position, stepData.position + stepData.size);
+      stepData.rightHalf = stepData.currentValues.slice(stepData.position + stepData.size, stepData.position + stepData.size * 2);
     }
-    
+
     this.stepData = stepData;
-
-    console.log(stepData);
-
-    return stepData.size >= stepData.currentValues.length;
+    return false;
   }
 }
