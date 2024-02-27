@@ -35,7 +35,7 @@ export class SortStepService {
     if (this.stepData === undefined)
       throw new Error('stepData is not set');
 
-    const middle:number = this.stepData.size;
+    const middle:number = Math.min(this.stepData.size, Math.floor((this.stepData.currentValues.length - this.stepData.position) / 2));
     const leftIndex:number = this.stepData.position + (this.stepData.firstHalfIndex ?? 0);
     const rightIndex:number = this.stepData.position + (this.stepData.secondHalfIndex ?? middle);
 
@@ -51,7 +51,8 @@ export class SortStepService {
     
     console.log(this.stepData);
 
-    const middle:number = stepData.size;
+    const middle:number = Math.min(stepData.size, Math.floor((stepData.currentValues.length - stepData.position) / 2));
+    const maxLength:number = Math.min(stepData.size * 2, stepData.currentValues.length - stepData.position);
     if (stepData.temporaryValues === undefined) {
       stepData.temporaryValues = [];
       stepData.firstHalfIndex = 0;
@@ -76,12 +77,12 @@ export class SortStepService {
       stepData.secondHalfIndex += 1;
     }
 
-    if (stepData.firstHalfIndex >= middle || stepData.secondHalfIndex >= stepData.currentValues.length) {
+    if (stepData.firstHalfIndex >= middle || stepData.secondHalfIndex >= maxLength) {
       // Remove the rest
-      const startIndex:number = stepData.firstHalfIndex >= middle ? rightIndex : leftIndex;
-      const endIndex:number = stepData.firstHalfIndex >= middle ? stepData.currentValues.length - 1 : middle - 1;
+      const startIndex:number = stepData.firstHalfIndex >= middle ? stepData.secondHalfIndex : stepData.firstHalfIndex;
+      const endIndex:number = stepData.firstHalfIndex >= middle ? maxLength - 1 : middle - 1;
       for (let i = startIndex; i <= endIndex; i++) {
-        stepData.temporaryValues.push(stepData.currentValues[i]);
+        stepData.temporaryValues.push(stepData.currentValues[stepData.position + i]);
       }
 
       // Copy temporaryValues to currentValues
@@ -93,7 +94,7 @@ export class SortStepService {
       stepData.firstHalfIndex = undefined;
       stepData.secondHalfIndex = undefined;
       stepData.position += stepData.size * 2;
-      if (stepData.position >= stepData.currentValues.length) {
+      if (stepData.position >= stepData.currentValues.length - stepData.size) {
         stepData.size *= 2;
         stepData.position = 0;
       }
