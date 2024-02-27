@@ -1,0 +1,6 @@
+<div *ngIf="sorterState === sorterStateEnum.Initializing">
+    <app-initialize (startSorter)="onInitializeSubmit()"></app-initialize>
+</div>
+<div *ngIf="sorterState === sorterStateEnum.Sorting">
+    <app-sorter></app-sorter>
+</div>

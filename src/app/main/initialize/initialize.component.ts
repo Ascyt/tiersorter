@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ValuesService, Value } from '../values.service';
 import { ValueInputComponent } from './value-input/value-input.component';
@@ -6,12 +6,13 @@ import { ValueInputComponent } from './value-input/value-input.component';
 @Component({
   selector: 'app-initialize',
   standalone: true,
-  imports: [CommonModule, ValueInputComponent],
+  imports: [CommonModule, ValueInputComponent, ],
   templateUrl: './initialize.component.html',
   styleUrl: './initialize.component.scss'
 })
 export class InitializeComponent {
   public values: Value[] = this.valuesService.values;
+  @Output() public startSorter = new EventEmitter();  
 
   constructor(private valuesService: ValuesService) { }
 
@@ -24,6 +25,6 @@ export class InitializeComponent {
   }
 
   public onSubmit(): void {
-    console.log(this.values);
+    this.startSorter.emit();
   }
 }
