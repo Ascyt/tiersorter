@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, HostListener, EventEmitter, Output, QueryList, ViewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ValuesService, Value } from '../values.service';
 import { ValueInputComponent } from './value-input/value-input.component';
@@ -6,21 +6,49 @@ import { ValueInputComponent } from './value-input/value-input.component';
 @Component({
   selector: 'app-initialize',
   standalone: true,
-  imports: [CommonModule, ValueInputComponent, ],
+  imports: [CommonModule, ValueInputComponent],
   templateUrl: './initialize.component.html',
   styleUrl: './initialize.component.scss'
 })
 export class InitializeComponent {
   @Output() public startSorter = new EventEmitter();  
+  @ViewChildren(ValueInputComponent) valueInputs: QueryList<ValueInputComponent> = new QueryList();
+
   public get values(): Value[] {
     return this.valuesService.values;
   }
 
   constructor(private valuesService: ValuesService) { }
 
-  public addValue(): void {
+  @HostListener('document:keydown.enter', ['$event'])
+  public addValue(event:KeyboardEvent|undefined = undefined): void {
     this.values.push(this.valuesService.getNewValue());
+
+    setTimeout(() => {
+      const lastInput = this.valueInputs.last;
+      if (lastInput !== undefined) {
+        lastInput.focus();
+      }
+      else {
+        console.error('lastInput is undefined');
+      }
+    });
   }
+  @HostListener('document:keydown.shift.enter', ['$event'])
+  public removeLastValue(event:KeyboardEvent|undefined = undefined): void {
+    this.values.pop();
+
+    this.focusElement(this.values.length - 1);
+  }
+
+
+  public focusElement(index: number): void {
+    const input = this.valueInputs.toArray()[index];
+    if (input !== undefined) {
+      input.focus();
+    }
+  }
+  
 
   public removeValue(index: number): void {
     this.values.splice(index, 1);

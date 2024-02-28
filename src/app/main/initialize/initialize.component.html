@@ -1,7 +1,7 @@
 <table class="table">
     <tbody>
-        <tr *ngFor="let value of values">
-            <app-value-input [value]="value"></app-value-input>
+        <tr *ngFor="let value of values; let i = index;">
+            <app-value-input #valueInput [value]="value" (focusPrevious)="focusElement(i - 1)" (focusNext)="focusElement(i + 1)"></app-value-input>
         </tr>   
     </tbody>
 </table>
@@ -19,3 +19,8 @@
     </label>
     <input type="file" id="json-upload" (change)="uploadJson($event)" accept=".json">
 </div>
+
+<h4 class="mt-2">Hotkeys</h4>
+<ul class="hotkeys">
+
+</ul>
