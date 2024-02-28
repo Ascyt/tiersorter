@@ -1,6 +1,6 @@
 <td class="align-middle">
     <input type="text" #valueInput class="form-control align-middle" [(ngModel)]="value.value" placeholder="Name" 
-    (keydown.arrowup)="focusPreviousElement()" (keydown.arrowdown)="focusNextElement()" (keydown.backspace)="deleteIfEmpty()" (keydown.control.backspace)="deleteIfEmpty()">
+    (keydown.arrowup)="focusPreviousElement()" (keydown.arrowdown)="focusNextElement()" (keydown.backspace)="deleteIfEmpty($event)" (keydown.control.backspace)="deleteIfEmpty($event)">
 </td>
 <td class="align-middle">
     <button style="margin-left: 0.25rem" class="btn btn-outline-danger btn ml-2" (click)="onDelete()">Delete</button>

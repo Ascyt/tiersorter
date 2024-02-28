@@ -32,8 +32,10 @@ export class ValueInputComponent {
     this.focusNext.emit();
   }
 
-  public deleteIfEmpty(): void {
+  public deleteIfEmpty(event:Event): void {
     if (this.value.value === '') {
+      event.preventDefault();
+      
       this.onDelete();
       this.focusPreviousElement();
     }

@@ -1,4 +1,4 @@
-import { Component, HostListener, EventEmitter, Output, QueryList, ViewChildren } from '@angular/core';
+import { Component, HostListener, EventEmitter, Output, QueryList, ViewChildren, Host } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ValuesService, Value } from '../values.service';
 import { ValueInputComponent } from './value-input/value-input.component';
@@ -22,6 +22,10 @@ export class InitializeComponent {
 
   @HostListener('document:keydown.enter', ['$event'])
   public addValue(event:KeyboardEvent|undefined = undefined): void {
+    if (event !== undefined) {
+      event.preventDefault();
+    }
+
     this.values.push(this.valuesService.getNewValue());
 
     setTimeout(() => {
@@ -36,11 +40,24 @@ export class InitializeComponent {
   }
   @HostListener('document:keydown.shift.enter', ['$event'])
   public removeLastValue(event:KeyboardEvent|undefined = undefined): void {
+    if (event !== undefined) {
+      event.preventDefault();
+    }
+
     this.values.pop();
 
     this.focusElement(this.values.length - 1);
   }
 
+  @HostListener('document:keydown.home', ['$event'])
+  public focusFirstElement(event:KeyboardEvent|undefined = undefined): void {
+    this.focusElement(0);
+  }
+
+  @HostListener('document:keydown.end', ['$event'])
+  public focusLastElement(event:KeyboardEvent|undefined = undefined): void {
+    this.focusElement(this.values.length - 1);
+  }
 
   public focusElement(index: number): void {
     const input = this.valueInputs.toArray()[index];
@@ -58,7 +75,12 @@ export class InitializeComponent {
     this.startSorter.emit();
   }
 
-  downloadJson():void {
+  @HostListener('document:keydown.control.s', ['$event'])
+  downloadJson(event:KeyboardEvent|undefined = undefined):void {
+    if (event !== undefined) {
+      event.preventDefault();
+    }
+
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.values));
     const downloadAnchorNode = document.createElement('a');
     downloadAnchorNode.setAttribute("href", dataStr);
@@ -68,6 +90,14 @@ export class InitializeComponent {
     downloadAnchorNode.remove();
   }
 
+  @HostListener('document:keydown', ['$event'])
+  onKeyPress(event: KeyboardEvent) {
+    if (event.ctrlKey && event.key === 'o') {
+      event.preventDefault(); // Prevent the default browser behavior (e.g., open file dialog)
+      const fileInput = document.getElementById('json-upload') as HTMLInputElement;
+      fileInput.click();
+    }
+  }
   uploadJson(event: Event):void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
