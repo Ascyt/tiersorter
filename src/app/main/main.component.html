@@ -5,5 +5,5 @@
     <app-sorter (sortingComplete)="onSorterFinish()"></app-sorter>
 </div>
 <div *ngIf="sorterState === sorterStateEnum.Finished">
-    <app-finished></app-finished>
+    <app-finished (startOver)="onFinishedStartOver()"></app-finished>
 </div>

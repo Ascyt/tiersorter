@@ -1,3 +1,8 @@
-
-<button class="btn btn-outline-primary" (click)="decisionMade(true)">{{decisionLeft?.value}}</button>
-<button class="btn btn-outline-primary" (click)="decisionMade(false)">{{decisionRight?.value}}</button>
+<div class="row">
+    <div class="col-6">
+        <button class="choice" (click)="decisionMade(true)">{{decisionLeft?.value}}</button>
+    </div>
+    <div class="col-6">
+        <button class="choice" (click)="decisionMade(false)">{{decisionRight?.value}}</button>
+    </div>
+</div>  

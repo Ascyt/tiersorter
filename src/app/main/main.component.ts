@@ -48,4 +48,8 @@ export class MainComponent {
   onSorterFinish() {
     this.sorterState = SorterState.Finished;
   }
+
+  onFinishedStartOver() {
+    this.sorterState = SorterState.Initializing;
+  }
 }

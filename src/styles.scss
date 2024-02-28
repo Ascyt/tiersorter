@@ -134,3 +134,26 @@ input.form-control, textarea.form-control, select.form-control{
 
     transition: 0.2s;
 }
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+
+    th, td {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid var(--back-mid);
+        color: var(--front);
+    }
+
+    th {
+        background-color: var(--back-mid);
+    }
+
+    td {
+        background-color: var(--back);
+    }
+
+}
