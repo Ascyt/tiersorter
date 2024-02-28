@@ -78,6 +78,7 @@ export class SortStepService {
       }
 
       if (stepData.size >= stepData.currentValues.length) {
+        this.valuesService.values = stepData.currentValues;
         this.stepData = undefined;
         return true;
       }

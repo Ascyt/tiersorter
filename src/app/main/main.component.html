@@ -2,5 +2,8 @@
     <app-initialize (startSorter)="onInitializeSubmit()"></app-initialize>
 </div>
 <div *ngIf="sorterState === sorterStateEnum.Sorting">
-    <app-sorter></app-sorter>
+    <app-sorter (sortingComplete)="onSorterFinish()"></app-sorter>
+</div>
+<div *ngIf="sorterState === sorterStateEnum.Finished">
+    <app-finished></app-finished>
 </div>
