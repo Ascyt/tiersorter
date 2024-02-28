@@ -16,8 +16,14 @@ export interface StepData {
 export class SortStepService {
   private stepData: StepData|undefined;
   public currentDecision: (Value|undefined)[] = [undefined, undefined]; // always length 2
+  public decisionsMade: number = 0;
 
   constructor(private valuesService:ValuesService) { }
+
+  public get decisionsNeeded(): number {
+    const n = this.valuesService.values.length;
+    return n * Math.ceil(Math.log2(n)) - Math.pow(2, Math.ceil(Math.log2(n))) + 1;
+  }
 
   initializeData():void {
     this.stepData = {
@@ -30,6 +36,7 @@ export class SortStepService {
     };
 
     this.currentDecision = this.getDecision();
+    this.decisionsMade = 0;
   }
 
   // Always returns Value[] of length 2
@@ -54,6 +61,7 @@ export class SortStepService {
     } else {
       stepData.temporaryValues.push(stepData.rightHalf.splice(0, 1)[0]);
     }
+    this.decisionsMade++;
 
     let nextStep:boolean = false;
     if (stepData.leftHalf.length === 0) {

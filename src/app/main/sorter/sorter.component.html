@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row mb-2">
     <div class="col-6">
         <button class="choice" (click)="decisionMade(true)">{{decisionLeft?.value}}</button>
     </div>
@@ -6,3 +6,6 @@
         <button class="choice" (click)="decisionMade(false)">{{decisionRight?.value}}</button>
     </div>
 </div>  
+
+<p class="progress-text">{{sortStepService.decisionsMade + 1}} of {{sortStepService.decisionsNeeded}}</p>
+<ngb-progressbar type="success" [value]="sortStepService.decisionsMade / sortStepService.decisionsNeeded * 100"></ngb-progressbar>
