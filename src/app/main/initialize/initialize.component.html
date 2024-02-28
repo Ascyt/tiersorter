@@ -7,4 +7,15 @@
 </table>
 <button class="btn btn-outline-primary" (click)="addValue()">Add Value</button>
 <div class="m-2"></div>
-<button class="btn btn-primary" (click)="onSubmit()">Submit</button>
+<button class="btn btn-primary mb-2" (click)="onSubmit()">Submit</button>
+
+<h4 class="mt-2">JSON</h4>
+<div class="json-tools">
+    <button class="btn btn-outline-secondary" (click)="downloadJson()">Download</button>
+    <div class="m-1"></div>
+
+    <label for="json-upload" class="file-input">
+        Upload
+    </label>
+    <input type="file" id="json-upload" (change)="uploadJson($event)" accept=".json">
+</div>

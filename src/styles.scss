@@ -157,3 +157,27 @@ input.form-control, textarea.form-control, select.form-control{
     }
 
 }
+
+
+input[type="file"] {
+    display: none;
+}
+.file-input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 10px;
+    background-color: transparent;
+    color: #6c757d;
+    border: 1px solid #6c757d;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+        background-color: #6c757d;
+        color: white;
+        transition: 0.2s;
+    }
+}
