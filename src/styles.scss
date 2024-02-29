@@ -138,7 +138,6 @@ input.form-control, textarea.form-control, select.form-control{
 .custom-table {
     width: 100%;
     border-collapse: collapse;
-    border-radius: 10px;
     overflow: hidden;
 
     th, td {
@@ -180,4 +179,30 @@ input[type="file"] {
         color: white;
         transition: 0.2s;
     }
+}
+
+.hotkeys {
+    list-style: none;
+    padding-left: 10px;
+    margin: 0;
+    border-left: 1px solid var(--back-mid);
+
+    li {
+        margin-bottom: 10px;
+        font-size: 14px;
+        color: var(--front-mid);
+
+        .key {
+            color: var(--front-mid);
+            font-weight: bold;
+            border: 1px solid var(--mid);
+            border-radius: 3px;
+            padding: 2px 5px;
+            background-color: var(--back-high);
+        }
+
+        .description {
+            color: var(--front);
+        }
+  }
 }
