@@ -1,19 +1,22 @@
-import { Component, HostListener, EventEmitter, Output, QueryList, ViewChildren, Host } from '@angular/core';
+import { Component, HostListener, EventEmitter, Output, QueryList, ViewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ValuesService, Value } from '../values.service';
 import { ValueInputComponent } from './value-input/value-input.component';
 import { SortStepService } from '../sorter/sort-step.service';
+import { NgbAlert, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-initialize',
   standalone: true,
-  imports: [CommonModule, ValueInputComponent],
+  imports: [CommonModule, ValueInputComponent, NgbModule],
   templateUrl: './initialize.component.html',
   styleUrl: './initialize.component.scss'
 })
 export class InitializeComponent {
   @Output() public startSorter = new EventEmitter();  
   @ViewChildren(ValueInputComponent) valueInputs: QueryList<ValueInputComponent> = new QueryList();
+
+  public showNotEnoughValuesAlert = false;
 
   public get values(): Value[] {
     return this.valuesService.values;
@@ -74,6 +77,11 @@ export class InitializeComponent {
 
   @HostListener('document:keydown.control.enter', ['$event'])
   public onSubmit(event:KeyboardEvent|undefined = undefined): void {
+    if (this.values.length < 2) {
+      this.showNotEnoughValuesAlert = true;
+      return;
+    }
+
     // Shuffle array
     for (let i = this.values.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
