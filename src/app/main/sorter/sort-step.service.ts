@@ -20,9 +20,13 @@ export class SortStepService {
 
   constructor(private valuesService:ValuesService) { }
 
+  public getDecisionsNeeded(n:number): number {
+    return n * Math.ceil(Math.log2(n)) - Math.pow(2, Math.ceil(Math.log2(n))) + 1;
+  }
+
   public get decisionsNeeded(): number {
     const n = this.valuesService.values.length;
-    return n * Math.ceil(Math.log2(n)) - Math.pow(2, Math.ceil(Math.log2(n))) + 1;
+    return this.getDecisionsNeeded(n);
   }
 
   initializeData():void {

@@ -7,7 +7,9 @@
 </table>
 <button class="btn btn-outline-primary" (click)="addValue()">Add Value</button>
 <div class="m-2"></div>
-<button class="btn btn-primary mb-2" (click)="onSubmit()">Submit</button>
+<button class="btn btn-primary mb-2" (click)="onSubmit()">Sort!</button>
+
+<p class="decisions-needed">{{values.length}} element<span *ngIf="values.length !== 1">s</span><span *ngIf="values.length > 1"> | {{sortStepService.getDecisionsNeeded(values.length)}} decision<span *ngIf="sortStepService.getDecisionsNeeded(values.length) !== 1">s</span> needed</span></p>
 
 <h4 class="mt-2">JSON</h4>
 <div class="json-tools">
@@ -32,4 +34,5 @@
     <li><span class="key">Shift</span> + <span class="key">Enter</span>: <span class="description">Delete last value</span></li>
     <li><span class="key">Control</span> + <span class="key">S</span>: <span class="description">Download JSON</span></li>
     <li><span class="key">Control</span> + <span class="key">O</span>: <span class="description">Upload JSON</span></li>
+    <li><span class="key">Control</span> + <span class="key">Enter</span>: <span class="description">Start sort</span></li>
 </ul>

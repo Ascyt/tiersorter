@@ -2,6 +2,7 @@ import { Component, HostListener, EventEmitter, Output, QueryList, ViewChildren,
 import { CommonModule } from '@angular/common';
 import { ValuesService, Value } from '../values.service';
 import { ValueInputComponent } from './value-input/value-input.component';
+import { SortStepService } from '../sorter/sort-step.service';
 
 @Component({
   selector: 'app-initialize',
@@ -18,7 +19,7 @@ export class InitializeComponent {
     return this.valuesService.values;
   }
 
-  constructor(private valuesService: ValuesService) { }
+  constructor(private valuesService: ValuesService, public sortStepService:SortStepService) { }
 
   @HostListener('document:keydown.enter', ['$event'])
   public addValue(event:KeyboardEvent|undefined = undefined): void {
@@ -71,7 +72,8 @@ export class InitializeComponent {
     this.values.splice(index, 1);
   }
 
-  public onSubmit(): void {
+  @HostListener('document:keydown.control.enter', ['$event'])
+  public onSubmit(event:KeyboardEvent|undefined = undefined): void {
     this.startSorter.emit();
   }
 
