@@ -16,9 +16,13 @@ export interface StepData {
 export class SortStepService {
   private stepData: StepData|undefined;
   public currentDecision: (Value|undefined)[] = [undefined, undefined]; // always length 2
-  public decisionsMade: number = 0;
+  public decisionsMadeStack: StepData[] = [];
 
   constructor(private valuesService:ValuesService) { }
+
+  public get decisionsMade(): number {
+    return this.decisionsMadeStack.length;
+  }
 
   public getDecisionsNeeded(n:number): number {
     return n * Math.ceil(Math.log2(n)) - Math.pow(2, Math.ceil(Math.log2(n))) + 1;
@@ -40,7 +44,7 @@ export class SortStepService {
     };
 
     this.currentDecision = this.getDecision();
-    this.decisionsMade = 0;
+    this.decisionsMadeStack = [];
   }
 
   // Always returns Value[] of length 2
@@ -56,16 +60,21 @@ export class SortStepService {
     if (this.stepData === undefined)
       throw new Error('stepData is not set');
 
-    const stepData:StepData = {...this.stepData};
+    this.decisionsMadeStack.push({
+      currentValues: this.stepData.currentValues.map(value => ({ ...value })),
+      size: this.stepData.size,
+      position: this.stepData.position,
+      temporaryValues: this.stepData.temporaryValues.map(value => ({ ...value })),
+      leftHalf: this.stepData.leftHalf.map(value => ({ ...value })),
+      rightHalf: this.stepData.rightHalf.map(value => ({ ...value }))
+    });
+    const stepData:StepData = this.stepData;
     
-    console.log(this.stepData);
-
     if (useLeft) {
       stepData.temporaryValues.push(stepData.leftHalf.splice(0, 1)[0]);
     } else {
       stepData.temporaryValues.push(stepData.rightHalf.splice(0, 1)[0]);
     }
-    this.decisionsMade++;
 
     let nextStep:boolean = false;
     if (stepData.leftHalf.length === 0) {
@@ -101,5 +110,16 @@ export class SortStepService {
 
     this.stepData = stepData;
     return false;
+  }
+
+  // Reverses the last sort step
+  previousStep(): void {
+    if (this.stepData === undefined)
+      throw new Error('stepData is not set');
+
+    if (this.decisionsMadeStack.length === 0)
+      return;
+      
+    this.stepData = this.decisionsMadeStack.pop();
   }
 }

@@ -29,9 +29,14 @@ export class SorterComponent {
 
     if (isFinished) {
       this.sortingComplete.emit();
-      console.log("finished");
       return;
     }
+
+    this.sortStepService.currentDecision = this.sortStepService.getDecision();
+  }
+
+  public previousStep(): void {
+    this.sortStepService.previousStep();
 
     this.sortStepService.currentDecision = this.sortStepService.getDecision();
   }
