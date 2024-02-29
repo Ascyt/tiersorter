@@ -74,6 +74,12 @@ export class InitializeComponent {
 
   @HostListener('document:keydown.control.enter', ['$event'])
   public onSubmit(event:KeyboardEvent|undefined = undefined): void {
+    // Shuffle array
+    for (let i = this.values.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [this.values[i], this.values[j]] = [this.values[j], this.values[i]];
+    }
+
     this.startSorter.emit();
   }
 
