@@ -12,6 +12,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 })
 export class SorterComponent {
   @Output() public sortingComplete = new EventEmitter();
+  @Output() public startOver = new EventEmitter();
 
   constructor(private valuesService: ValuesService, public sortStepService:SortStepService) {
 
@@ -49,5 +50,10 @@ export class SorterComponent {
     this.sortStepService.previousStep();
 
     this.sortStepService.currentDecision = this.sortStepService.getDecision();
+  }
+
+  @HostListener('document:keydown.control.backspace', ['$event'])
+  public startOverClicked(event:KeyboardEvent|undefined = undefined): void {
+    this.startOver.emit();
   }
 }

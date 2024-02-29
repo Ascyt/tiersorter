@@ -9,12 +9,15 @@
 
 <button class="btn btn-outline-secondary previous-button mb-2" [disabled]="sortStepService.decisionsMade === 0" (click)="previousStep()">Previous</button>
 
-<p class="progress-text">{{sortStepService.decisionsMade + 1}} of {{sortStepService.decisionsNeeded}}</p>
-<ngb-progressbar type="success" [value]="sortStepService.decisionsMade / sortStepService.decisionsNeeded * 100"></ngb-progressbar>
+<p class="progress-text mb-0">{{sortStepService.decisionsMade + 1}} of {{sortStepService.decisionsNeeded}}</p>
+<ngb-progressbar class="mt-0 mb-2" type="success" [value]="sortStepService.decisionsMade / sortStepService.decisionsNeeded * 100">{{sortStepService.decisionsNeeded - sortStepService.decisionsMade}} left</ngb-progressbar>
+
+<button class="btn btn-outline-primary" (click)="startOverClicked()">Back</button>
 
 <h4 class="mt-4">Hotkeys</h4>
 <ul class="hotkeys">
     <li><span class="key">Left</span>: <span class="description">Left decision</span></li>
     <li><span class="key">Right</span>: <span class="description">Right decision</span></li>
     <li><span class="key">Backspace</span>: <span class="description">Previous</span></li>
+    <li><span class="key">Ctrl</span> + <span class="key">Backspace</span>: <span class="description">Back</span></li>
 </ul>

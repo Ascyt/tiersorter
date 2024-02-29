@@ -2,8 +2,8 @@
     <app-initialize (startSorter)="onInitializeSubmit()"></app-initialize>
 </div>
 <div *ngIf="sorterState === sorterStateEnum.Sorting">
-    <app-sorter (sortingComplete)="onSorterFinish()"></app-sorter>
+    <app-sorter (sortingComplete)="onSorterFinish()" (startOver)="onStartOver()"></app-sorter>
 </div>
 <div *ngIf="sorterState === sorterStateEnum.Finished">
-    <app-finished (startOver)="onFinishedStartOver()"></app-finished>
+    <app-finished (startOver)="onStartOver()"></app-finished>
 </div>

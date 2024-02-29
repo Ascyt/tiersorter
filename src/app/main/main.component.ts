@@ -49,7 +49,7 @@ export class MainComponent {
     this.sorterState = SorterState.Finished;
   }
 
-  onFinishedStartOver() {
+  onStartOver() {
     this.sorterState = SorterState.Initializing;
   }
 }
