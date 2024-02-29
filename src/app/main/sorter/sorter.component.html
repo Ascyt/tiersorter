@@ -9,7 +9,8 @@
 
 <button class="btn btn-outline-secondary previous-button mb-2" [disabled]="sortStepService.decisionsMade === 0" (click)="previousStep()">Previous</button>
 
-<p class="progress-text mb-0">{{sortStepService.decisionsMade + 1}} of {{sortStepService.decisionsNeeded}}</p>
+<p class="progress-text mb-1">{{sortStepService.decisionsMade + 1}} of {{sortStepService.decisionsNeeded}} <button type="button" class="popover-button" ngbTooltip="Assuming worst-case. Likely to require less decisions" triggers="mouseenter:mouseleave">?</button></p>
+
 <ngb-progressbar class="mt-0 mb-2" type="success" [value]="sortStepService.decisionsMade / sortStepService.decisionsNeeded * 100">{{sortStepService.decisionsNeeded - sortStepService.decisionsMade}} left</ngb-progressbar>
 
 <button class="btn btn-outline-primary" (click)="startOverClicked()">Back</button>

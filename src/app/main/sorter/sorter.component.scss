@@ -25,3 +25,22 @@
 .previous-button {
     width: 100%;
 }
+
+.popover-button {
+    padding: 2px;
+    padding-right: 5px;
+    padding-left: 5px;
+    font-size: 0.5rem;
+
+    background-color: var(--back-high);
+    color: var(--front);
+    border: 1px solid var(--mid);
+    border-radius: 10px;
+    cursor: default;
+    transition: 0.2s;
+
+    &:hover {
+        background-color: var(--back-mid);
+        transition: 0.2s;
+    }
+}
