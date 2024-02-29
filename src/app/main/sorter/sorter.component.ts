@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, HostListener } from '@angular/core';
 import { Value, ValuesService } from '../values.service';
 import { SortStepService } from './sort-step.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -23,8 +23,17 @@ export class SorterComponent {
   public get decisionRight(): (Value|undefined) {
     return this.sortStepService.currentDecision[1];
   }
+  
+  @HostListener('document:keydown.arrowleft', ['$event'])
+  public decisionLeftMade(event:KeyboardEvent|undefined = undefined): void {
+    this.decisionMade(true);
+  }
+  @HostListener('document:keydown.arrowright', ['$event'])
+  public decisionRightMade(event:KeyboardEvent|undefined = undefined): void {
+    this.decisionMade(false);
+  }
 
-  public decisionMade(isLeft: boolean): void {
+  private decisionMade(isLeft: boolean): void {
     const isFinished:boolean = this.sortStepService.sortSingleStep(isLeft);
 
     if (isFinished) {
@@ -35,7 +44,8 @@ export class SorterComponent {
     this.sortStepService.currentDecision = this.sortStepService.getDecision();
   }
 
-  public previousStep(): void {
+  @HostListener('document:keydown.backspace', ['$event'])
+  public previousStep(event:KeyboardEvent|undefined = undefined): void {
     this.sortStepService.previousStep();
 
     this.sortStepService.currentDecision = this.sortStepService.getDecision();
