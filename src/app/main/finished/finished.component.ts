@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, HostListener } from '@angular/core';
 import { DefaultValueListComponent } from './default-value-list/default-value-list.component';
 
 @Component({
@@ -11,7 +11,8 @@ import { DefaultValueListComponent } from './default-value-list/default-value-li
 export class FinishedComponent {
   @Output() public startOver = new EventEmitter();
 
-  public startOverClicked(): void {
+  @HostListener('document:keydown.enter', ['$event'])
+  public startOverClicked(event:KeyboardEvent|undefined = undefined): void {
     this.startOver.emit();
   }
 }
