@@ -19,28 +19,28 @@ export class InitializeComponent {
   public showNotEnoughValuesAlert = false;
 
   public get values(): Value[] {
-    return this.valuesService.values;
+    // exclude last
+    return this.valuesService.values.slice(0, -1);
   }
 
-  constructor(private valuesService: ValuesService, public sortStepService:SortStepService) { }
+  constructor(public valuesService: ValuesService, public sortStepService:SortStepService) {
+    valuesService.values.push(valuesService.getNewValue());
+   }
 
-  @HostListener('document:keydown.enter', ['$event'])
   public addValue(event:KeyboardEvent|undefined = undefined): void {
     if (event !== undefined) {
       event.preventDefault();
     }
 
-    this.values.push(this.valuesService.getNewValue());
-
-    setTimeout(() => {
-      const lastInput = this.valueInputs.last;
-      if (lastInput !== undefined) {
-        lastInput.focus();
-      }
-      else {
-        console.error('lastInput is undefined');
-      }
-    });
+    this.focusElement(this.valuesService.values.length - 1);
+    this.valuesService.values.push(this.valuesService.getNewValue());
+  }
+  @HostListener('document:keydown.enter', ['$event']) 
+  public addValueEnter(event:KeyboardEvent|undefined = undefined): void {
+    const input = this.valueInputs.toArray()[this.valuesService.values.length - 1];
+    if (input !== undefined) {
+      input.disableGreyedOut();
+    }
   }
   @HostListener('document:keydown.shift.enter', ['$event'])
   public removeLastValue(event:KeyboardEvent|undefined = undefined): void {
@@ -48,9 +48,9 @@ export class InitializeComponent {
       event.preventDefault();
     }
 
-    this.values.pop();
+    this.valuesService.values.splice(this.valuesService.values.length - 2, 1);
 
-    this.focusElement(this.values.length - 1);
+    this.focusLastElement();
   }
 
   @HostListener('document:keydown.home', ['$event'])
@@ -60,7 +60,7 @@ export class InitializeComponent {
 
   @HostListener('document:keydown.end', ['$event'])
   public focusLastElement(event:KeyboardEvent|undefined = undefined): void {
-    this.focusElement(this.values.length - 1);
+    this.focusElement(this.valuesService.values.length - 2);
   }
 
   public focusElement(index: number): void {
@@ -82,10 +82,12 @@ export class InitializeComponent {
       return;
     }
 
+    this.valuesService.values = this.values;
+
     // Shuffle array
-    for (let i = this.values.length - 1; i > 0; i--) {
+    for (let i = this.valuesService.values.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [this.values[i], this.values[j]] = [this.values[j], this.values[i]];
+      [this.valuesService.values[i], this.valuesService.values[j]] = [this.valuesService.values[j], this.valuesService.values[i]];
     }
 
     this.startSorter.emit();

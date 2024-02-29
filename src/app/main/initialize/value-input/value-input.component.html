@@ -1,7 +1,7 @@
 <td class="align-middle">
-    <input type="text" #valueInput class="form-control align-middle" [(ngModel)]="value.value" placeholder="Item Name" 
-    (keydown.arrowup)="focusPreviousElement()" (keydown.arrowdown)="focusNextElement()" (keydown.backspace)="deleteIfEmpty($event)" (keydown.control.backspace)="deleteIfEmpty($event)" />
+    <input type="text" #valueInput class="form-control align-middle" [(ngModel)]="value.value" [placeholder]="isGreyedOut ? 'New Item' : 'Item Name'" 
+    (keydown.arrowup)="focusPreviousElement()" (keydown.arrowdown)="focusNextElement()" (keydown.backspace)="deleteIfEmpty($event)" (keydown.control.backspace)="deleteIfEmpty($event)" (input)="disableGreyedOut()" />
 </td>
-<td class="align-middle">
+<td class="align-middle" *ngIf="!isGreyedOut">
     <button style="margin-left: 0.25rem" class="btn btn-outline-danger btn ml-2" (click)="onDelete()">Delete</button>
 </td>
