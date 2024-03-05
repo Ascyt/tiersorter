@@ -48,6 +48,9 @@ export class InitializeComponent {
       event.preventDefault();
     }
 
+    if (this.valuesService.values.length <= 1) 
+      return;
+    
     this.valuesService.values.splice(this.valuesService.values.length - 2, 1);
 
     this.focusLastElement();
