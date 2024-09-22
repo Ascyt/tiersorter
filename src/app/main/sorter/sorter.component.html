@@ -13,7 +13,7 @@
 
 <ngb-progressbar class="mt-0 mb-2" type="success" [value]="sortStepService.decisionsMade / sortStepService.decisionsNeeded * 100">{{sortStepService.decisionsNeeded - sortStepService.decisionsMade}} left</ngb-progressbar>
 
-<button class="btn btn-outline-primary" (click)="startOverClicked()">Back</button>
+<button class="btn btn-outline-danger" (click)="startOverClicked()">Cancel sort</button>
 
 <h4 class="mt-4">Hotkeys</h4>
 <ul class="hotkeys">
