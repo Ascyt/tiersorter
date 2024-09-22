@@ -36,7 +36,7 @@ export class ValueInputComponent {
   }
 
   public deleteIfEmpty(event:Event): void {
-    if (this.value.value === '') {
+    if (this.value.value === '' && this.isGreyedOut === false) {
       event.preventDefault();
       
       this.onDelete();
